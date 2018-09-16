@@ -1,27 +1,27 @@
 import React, { Component } from 'react';
 import './App.css';
 
-const testIdeas = [
-  {
-    id: 1,
-    title: 'A test idea',
-    description: 'First line\nSecond line\nThird line',
-    createdDate: new Date(),
-  },
-  {
-    id: 2,
-    title: 'Editable titles',
-    description: 'Make titles editable',
-    createdDate: new Date(),
-  },
-];
+const getInitialIdeas = () => {
+  try {
+    return JSON.parse(window.localStorage.getItem('ideas')) || [];
+  } catch (error) {
+    return [];
+  }
+};
+
+const initialIdeas = getInitialIdeas();
 
 export default class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      ideas: testIdeas,
+      ideas: initialIdeas,
     };
+  }
+
+  componentDidUpdate() {
+    const { ideas } = this.state;
+    window.localStorage.setItem('ideas', JSON.stringify(ideas, null, 2));
   }
 
   render() {
