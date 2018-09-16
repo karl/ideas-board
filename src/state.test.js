@@ -1,6 +1,6 @@
-import { actions, reducer } from './state';
+import { actions, baseReducer } from './state';
 
-describe('Ideas Reducer', () => {
+describe('Ideas baseReducer', () => {
   let initialIdeas;
   beforeEach(() => {
     initialIdeas = [
@@ -22,7 +22,7 @@ describe('Ideas Reducer', () => {
   it('newIdea creates new blank idea', () => {
     const createdDate = '2018-09-16T20:58:07.221Z';
     const action = { type: 'NEW', payload: { createdDate } };
-    const ideas = reducer(initialIdeas, action);
+    const ideas = baseReducer(initialIdeas, action);
     expect(ideas).toEqual([
       ...initialIdeas,
       { createdDate, description: '', id: 3, title: '' },
@@ -32,7 +32,7 @@ describe('Ideas Reducer', () => {
   it('setTitle sets the title', () => {
     const newTitle = 'New first title';
     const action = actions.setTitle({ id: 1, title: newTitle });
-    const ideas = reducer(initialIdeas, action);
+    const ideas = baseReducer(initialIdeas, action);
     const updatedIdea = {
       ...initialIdeas[0],
       title: newTitle,
@@ -46,7 +46,7 @@ describe('Ideas Reducer', () => {
       id: 2,
       description: newDescription,
     });
-    const ideas = reducer(initialIdeas, action);
+    const ideas = baseReducer(initialIdeas, action);
     const updatedIdea = {
       ...initialIdeas[1],
       description: newDescription,
@@ -58,7 +58,7 @@ describe('Ideas Reducer', () => {
     const action = actions.deleteIdea({
       id: 1,
     });
-    const ideas = reducer(initialIdeas, action);
+    const ideas = baseReducer(initialIdeas, action);
     expect(ideas).toEqual([initialIdeas[1]]);
   });
 });

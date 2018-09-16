@@ -28,7 +28,15 @@ export const actions = {
   },
 };
 
-export const reducer = (ideas, action) => {
+export const getInitialIdeas = () => {
+  try {
+    return JSON.parse(window.localStorage.getItem('ideas')) || [];
+  } catch (error) {
+    return [];
+  }
+};
+
+export const baseReducer = (ideas, action) => {
   switch (action.type) {
     case 'NEW': {
       const { createdDate } = action.payload;
@@ -79,4 +87,14 @@ export const reducer = (ideas, action) => {
       return ideas;
     }
   }
+};
+
+const saveToLocalStorage = (ideas) => {
+  window.localStorage.setItem('ideas', JSON.stringify(ideas, null, 2));
+};
+
+export const reducer = (ideas, action) => {
+  const newIdeas = baseReducer(ideas, action);
+  saveToLocalStorage(ideas);
+  return newIdeas;
 };

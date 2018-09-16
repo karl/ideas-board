@@ -1,28 +1,13 @@
 import React, { Component } from 'react';
-import { actions, reducer } from './state';
+import { actions, reducer, getInitialIdeas } from './state';
 import './App.css';
-
-const getInitialIdeas = () => {
-  try {
-    return JSON.parse(window.localStorage.getItem('ideas')) || [];
-  } catch (error) {
-    return [];
-  }
-};
-
-const initialIdeas = getInitialIdeas();
 
 export default class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      ideas: initialIdeas,
+      ideas: getInitialIdeas(),
     };
-  }
-
-  componentDidUpdate() {
-    const { ideas } = this.state;
-    window.localStorage.setItem('ideas', JSON.stringify(ideas, null, 2));
   }
 
   render() {
