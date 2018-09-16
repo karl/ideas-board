@@ -7,6 +7,7 @@ export default class App extends Component {
     super(props);
     this.state = {
       ideas: getInitialIdeas(),
+      sortBy: 'createdDate',
       focusNew: false,
     };
   }
@@ -22,13 +23,24 @@ export default class App extends Component {
   }
 
   render() {
-    const { ideas } = this.state;
+    const { ideas, sortBy } = this.state;
 
     const dispatch = (action) => {
       this.setState({
         ideas: reducer(this.state.ideas, action),
       });
     };
+
+    const sortedIdeas = [...ideas].sort((a, b) => {
+      const aField = a[sortBy];
+      const bField = b[sortBy];
+
+      if (aField < bField) return -1;
+      if (aField > bField) return 1;
+      return 0;
+    });
+
+    const lastIdea = ideas[ideas.length - 1];
 
     return (
       <div>
@@ -44,10 +56,21 @@ export default class App extends Component {
           >
             + New Idea
           </button>
+          <select
+            className="sortBy"
+            value={sortBy}
+            onChange={(event) => {
+              const sortBy = event.target.value;
+              this.setState({ sortBy });
+            }}
+          >
+            <option value="createdDate">Sort by created date</option>
+            <option value="title">Sort by title</option>
+          </select>
           <h1>Ideas Board</h1>
         </div>
         <div>
-          {ideas.map((idea, index) => (
+          {sortedIdeas.map((idea, index) => (
             <div key={idea.id} className="idea">
               <input
                 className="title"
@@ -55,7 +78,7 @@ export default class App extends Component {
                 placeholder="title"
                 value={idea.title}
                 ref={(input) => {
-                  if (index === ideas.length - 1) {
+                  if (idea === lastIdea) {
                     this.lastTitleEl = input;
                   }
                 }}
