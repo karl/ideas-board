@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { actions, reducer, getInitialIdeas } from './state';
+import { Idea } from './Idea';
 import './App.css';
 
 export default class App extends Component {
@@ -15,15 +16,12 @@ export default class App extends Component {
   componentDidUpdate() {
     const { focusNew } = this.state;
     if (focusNew) {
-      this.lastTitleEl.focus();
-      this.setState({
-        focusNew: false,
-      });
+      this.setState({ focusNew: false });
     }
   }
 
   render() {
-    const { ideas, sortBy } = this.state;
+    const { ideas, sortBy, focusNew } = this.state;
 
     const dispatch = (action) => {
       this.setState({
@@ -70,47 +68,17 @@ export default class App extends Component {
           <h1>Ideas Board</h1>
         </div>
         <div>
-          {sortedIdeas.map((idea, index) => (
-            <div key={idea.id} className="idea">
-              <input
-                className="title"
-                type="text"
-                placeholder="title"
-                value={idea.title}
-                ref={(input) => {
-                  if (idea === lastIdea) {
-                    this.lastTitleEl = input;
-                  }
-                }}
-                onChange={(event) => {
-                  const title = event.target.value;
-                  dispatch(actions.setTitle({ id: idea.id, title }));
-                }}
-              />
-              <textarea
-                className="description"
-                placeholder="description"
-                value={idea.description}
-                maxLength={140}
-                onChange={(event) => {
-                  const description = event.target.value;
-                  dispatch(
-                    actions.setDescription({ id: idea.id, description })
-                  );
-                }}
-              />
-              <button
-                className="delete"
-                onClick={() => {
-                  dispatch(actions.deleteIdea({ id: idea.id }));
-                }}
-              >
-                Delete
-              </button>
-              <div className="createdDate">
-                Created {idea.createdDate.toString()}
-              </div>
-            </div>
+          {sortedIdeas.map((idea) => (
+            <Idea
+              key={idea.id}
+              idea={idea}
+              focusTitle={focusNew && idea === lastIdea}
+              setTitle={(payload) => dispatch(actions.setTitle(payload))}
+              setDescription={(payload) =>
+                dispatch(actions.setDescription(payload))
+              }
+              deleteIdea={(payload) => dispatch(actions.deleteIdea(payload))}
+            />
           ))}
         </div>
       </div>
