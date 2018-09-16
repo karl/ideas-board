@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { reducer } from './state';
 import './App.css';
 
 const getInitialIdeas = () => {
@@ -27,59 +28,39 @@ export default class App extends Component {
   render() {
     const { ideas } = this.state;
     const newIdea = () => {
-      const maxId = ideas.reduce((max, idea) => {
-        return Math.max(max, idea.id);
-      }, 0);
-      this.setState({
-        ideas: [
-          ...ideas,
-          {
-            id: maxId + 1,
-            title: '',
-            description: '',
-            createdDate: new Date(),
-          },
-        ],
-      });
+      return {
+        type: 'NEW',
+      };
     };
-    const setTitle = ({ id, title }) => {
-      this.setState({
-        ideas: ideas.map((idea) => {
-          if (idea.id !== id) {
-            return idea;
-          }
-          return {
-            ...idea,
-            title,
-          };
-        }),
-      });
+    const setTitle = (payload) => {
+      return {
+        type: 'SET_TITLE',
+        payload,
+      };
     };
-    const setDescription = ({ id, description }) => {
-      this.setState({
-        ideas: ideas.map((idea) => {
-          if (idea.id !== id) {
-            return idea;
-          }
-          return {
-            ...idea,
-            description,
-          };
-        }),
-      });
+    const setDescription = (payload) => {
+      return {
+        type: 'SET_DESCRIPTION',
+        payload,
+      };
     };
-    const deleteIdea = ({ id }) => {
+    const deleteIdea = (payload) => {
+      return {
+        type: 'DELETE',
+        payload,
+      };
+    };
+
+    const dispatch = (action) => {
       this.setState({
-        ideas: ideas.filter((idea) => {
-          return idea.id !== id;
-        }),
+        ideas: reducer(this.state.ideas, action),
       });
     };
 
     return (
       <div>
         <div className="header">
-          <button className="new" onClick={newIdea}>
+          <button className="new" onClick={() => dispatch(newIdea())}>
             + New Idea
           </button>
           <h1>Ideas Board</h1>
@@ -94,7 +75,7 @@ export default class App extends Component {
                 value={idea.title}
                 onChange={(event) => {
                   const title = event.target.value;
-                  setTitle({ id: idea.id, title });
+                  dispatch(setTitle({ id: idea.id, title }));
                 }}
               />
               <textarea
@@ -103,13 +84,13 @@ export default class App extends Component {
                 value={idea.description}
                 onChange={(event) => {
                   const description = event.target.value;
-                  setDescription({ id: idea.id, description });
+                  dispatch(setDescription({ id: idea.id, description }));
                 }}
               />
               <button
                 className="delete"
                 onClick={() => {
-                  deleteIdea({ id: idea.id });
+                  dispatch(deleteIdea({ id: idea.id }));
                 }}
               >
                 Delete
