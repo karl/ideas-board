@@ -1,6 +1,34 @@
+export const actions = {
+  newIdea: (payload) => {
+    return {
+      type: 'NEW',
+      payload,
+    };
+  },
+  setTitle: (payload) => {
+    return {
+      type: 'SET_TITLE',
+      payload,
+    };
+  },
+  setDescription: (payload) => {
+    return {
+      type: 'SET_DESCRIPTION',
+      payload,
+    };
+  },
+  deleteIdea: (payload) => {
+    return {
+      type: 'DELETE',
+      payload,
+    };
+  },
+};
+
 export const reducer = (ideas, action) => {
   switch (action.type) {
     case 'NEW': {
+      const { createdDate } = action.payload;
       const maxId = ideas.reduce((max, idea) => {
         return Math.max(max, idea.id);
       }, 0);
@@ -10,7 +38,7 @@ export const reducer = (ideas, action) => {
           id: maxId + 1,
           title: '',
           description: '',
-          createdDate: new Date(),
+          createdDate,
         },
       ];
     }

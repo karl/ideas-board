@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import { reducer } from './state';
+import { actions, reducer } from './state';
 import './App.css';
 
 const getInitialIdeas = () => {
   try {
+    // TODO: Rehydrate dates
     return JSON.parse(window.localStorage.getItem('ideas')) || [];
   } catch (error) {
     return [];
@@ -27,29 +28,6 @@ export default class App extends Component {
 
   render() {
     const { ideas } = this.state;
-    const newIdea = () => {
-      return {
-        type: 'NEW',
-      };
-    };
-    const setTitle = (payload) => {
-      return {
-        type: 'SET_TITLE',
-        payload,
-      };
-    };
-    const setDescription = (payload) => {
-      return {
-        type: 'SET_DESCRIPTION',
-        payload,
-      };
-    };
-    const deleteIdea = (payload) => {
-      return {
-        type: 'DELETE',
-        payload,
-      };
-    };
 
     const dispatch = (action) => {
       this.setState({
@@ -60,7 +38,12 @@ export default class App extends Component {
     return (
       <div>
         <div className="header">
-          <button className="new" onClick={() => dispatch(newIdea())}>
+          <button
+            className="new"
+            onClick={() =>
+              dispatch(actions.newIdea({ createdDate: new Date() }))
+            }
+          >
             + New Idea
           </button>
           <h1>Ideas Board</h1>
@@ -75,7 +58,7 @@ export default class App extends Component {
                 value={idea.title}
                 onChange={(event) => {
                   const title = event.target.value;
-                  dispatch(setTitle({ id: idea.id, title }));
+                  dispatch(actions.setTitle({ id: idea.id, title }));
                 }}
               />
               <textarea
@@ -84,13 +67,15 @@ export default class App extends Component {
                 value={idea.description}
                 onChange={(event) => {
                   const description = event.target.value;
-                  dispatch(setDescription({ id: idea.id, description }));
+                  dispatch(
+                    actions.setDescription({ id: idea.id, description })
+                  );
                 }}
               />
               <button
                 className="delete"
                 onClick={() => {
-                  dispatch(deleteIdea({ id: idea.id }));
+                  dispatch(actions.deleteIdea({ id: idea.id }));
                 }}
               >
                 Delete
