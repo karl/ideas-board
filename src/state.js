@@ -95,6 +95,6 @@ const saveToLocalStorage = (ideas) => {
 
 export const reducer = (ideas, action) => {
   const newIdeas = baseReducer(ideas, action);
-  saveToLocalStorage(ideas);
+  saveToLocalStorage(newIdeas);
   return newIdeas;
 };
