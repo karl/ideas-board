@@ -44,6 +44,7 @@ export default class App extends Component {
                 className="description"
                 placeholder="description"
                 value={idea.description}
+                maxLength={140}
                 onChange={(event) => {
                   const description = event.target.value;
                   dispatch(
