@@ -1,8 +1,11 @@
 export const actions = {
-  newIdea: (payload) => {
+  newIdea: () => {
+    const createdDate = new Date().toISOString();
     return {
       type: 'NEW',
-      payload,
+      payload: {
+        createdDate,
+      },
     };
   },
   setTitle: (payload) => {

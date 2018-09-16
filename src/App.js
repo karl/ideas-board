@@ -4,7 +4,6 @@ import './App.css';
 
 const getInitialIdeas = () => {
   try {
-    // TODO: Rehydrate dates
     return JSON.parse(window.localStorage.getItem('ideas')) || [];
   } catch (error) {
     return [];
@@ -38,12 +37,7 @@ export default class App extends Component {
     return (
       <div>
         <div className="header">
-          <button
-            className="new"
-            onClick={() =>
-              dispatch(actions.newIdea({ createdDate: new Date() }))
-            }
-          >
+          <button className="new" onClick={() => dispatch(actions.newIdea())}>
             + New Idea
           </button>
           <h1>Ideas Board</h1>

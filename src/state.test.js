@@ -8,20 +8,20 @@ describe('Ideas Reducer', () => {
         id: 1,
         title: 'First title',
         description: 'First description',
-        createdDate: new Date('2018-09-16T12:34:56'),
+        createdDate: '2018-09-16T11:34:56.000Z',
       },
       {
         id: 2,
         title: 'Second title',
         description: 'Second description',
-        createdDate: new Date('2018-09-16T17:16:15'),
+        createdDate: '2018-09-16T16:16:15.000Z',
       },
     ];
   });
 
   it('newIdea creates new blank idea', () => {
-    const createdDate = new Date('2018-09-17T00:00:00');
-    const action = actions.newIdea({ createdDate });
+    const createdDate = '2018-09-16T20:58:07.221Z';
+    const action = { type: 'NEW', payload: { createdDate } };
     const ideas = reducer(initialIdeas, action);
     expect(ideas).toEqual([
       ...initialIdeas,
